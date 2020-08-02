@@ -26,8 +26,26 @@ def test(request):
     models.PricePolicy.objects.create(price=99.9, period=3, course_id=course_id, content_type_id=content_type_id)
     """
     """
-    1.借助content_type快速实现数据插入(content_type)操作
-    """
+    1. 借助content_type快速实现数据插入(content_type)操作
+    1. 借助content_type快速实现数据插入(content_type)操作
     course_obj = models.Course.objects.filter(name='Python').first()
     models.PricePolicy.objects.create(price=99.9, period=3, content_object=course_obj)
+    """
+    """
+    2. 根据课程ID获取该课程所有的价格策略(借助GenericRelation实现反向查找)
+    """
+    try:
+        course_obj = models.Course.objects.filter(id=1).first()  # id=1是Python课程
+        price_policy_list = course_obj.price_policy_list.all()
+        print(
+            price_policy_list)  # <QuerySet [<PricePolicy: PricePolicy object (1)>, <PricePolicy: PricePolicy object (2)>]>
+        for i in price_policy_list:
+            print(i)
+        """
+        PricePolicy object (1)
+        PricePolicy object (2)
+        """
+    except Exception as e:
+        print(
+            e)  # Cannot resolve keyword 'object_id' into field. Choices are: content_object, content_type, content_type_id, course_id, id, period, price
     return HttpResponse('...')
