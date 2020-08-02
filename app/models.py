@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 
 
 # Create your models here.
@@ -25,5 +26,6 @@ class PricePolicy(models.Model):
     period = models.IntegerField(help_text='时间周期')
     # table_name = models.CharField(verbose_name='关联的表名称')
     # course_id = models.IntegerField(verbose_name='关联的表中的数据行的ID，即课程ID')
-    content_type = models.ForeignKey(ContentType, verbose_name='关联的表名称', on_delete=models.CASCADE)  # ContentType表中有表名称字段
+    content_type = models.ForeignKey(ContentType, verbose_name='关联的表名称', on_delete=models.CASCADE)
     course_id = models.IntegerField(verbose_name='关联的表中的数据行的ID，即课程ID')
+    content_object = GenericForeignKey('content_type', 'course_id')
